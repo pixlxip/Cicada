@@ -1,5 +1,3 @@
-import "jsr:@std/dotenv/load";
-
 export default {
   async fetch(request, _env, _ctx) {
     const params = new URL(request.url).searchParams;
