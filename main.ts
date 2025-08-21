@@ -21,8 +21,6 @@ export default {
 
     const track = data.recenttracks.track[0];
 
-    console.log(track?.image?.[coverIndex]?.['#text']?.toString?.());
-
     const bodyClasses = [
       ...(track?.['@attr']?.nowplaying === 'true' ? ['nowplaying'] : []),
       ...(!track ? ['empty'] : [])
