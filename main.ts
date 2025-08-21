@@ -16,6 +16,9 @@ export default {
     const response = await fetch(url.toString());
 
     const data = await response.json();
+
+    if (data.error && data.message === 'User not found') return new Response('user not found', { status: 404 });
+
     const track = data.recenttracks.track[0];
 
     console.log(track?.image?.[coverIndex]?.['#text']?.toString?.());
