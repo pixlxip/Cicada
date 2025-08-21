@@ -23,10 +23,11 @@ export default {
 
     console.log(track?.image?.[coverIndex]?.['#text']?.toString?.());
 
-    const bodyClasses = [];
-    if (track?.['@attr']?.nowplaying === 'true') bodyClasses.push('.nowplaying');
-    if (!track) bodyClasses.push('.empty');
-    const bodyClassesStr = bodyClasses.length ? ` class="${bodyClasses.join(' ')}"` : '';
+    const bodyClasses = [
+      ...(track?.['@attr']?.nowplaying === 'true' ? ['nowplaying'] : []),
+      ...(!track ? ['empty'] : [])
+    ].join(' ');
+    const bodyClassAttr = bodyClasses ? ` class="${bodyClassesStr}"` : '';
 
     const html = `<!DOCTYPE html>
     <head>${css ? `
