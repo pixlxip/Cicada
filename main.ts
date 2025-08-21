@@ -23,11 +23,16 @@ export default {
 
     console.log(track?.image?.[coverIndex]?.['#text']?.toString?.());
 
+    const bodyClasses = [];
+    if (track?.['@attr']?.nowplaying === 'true') bodyClasses.push('.nowplaying');
+    if (!track) bodyClasses.push('.empty');
+    const bodyClassesStr = bodyClasses.length ? ` class="${bodyClasses.join(' ')}"` : '';
+
     const html = `<!DOCTYPE html>
     <head>${css ? `
       <link rel='stylesheet' href='${css}' />` : ''}
     </head>
-    <body${track?.['@attr']?.nowplaying === 'true' ? ' .nowplaying' : ''}${track ? '' : ' .empty'}>
+    <body${bodyClassesStr}>
       <img class='cover' src="${track?.image?.[coverIndex]?.['#text']?.toString?.() || ''}" />
       <span class='songname'>${safeHtmlString(track?.name || '')}</span>
       <a class='linkedsongname' href='${track?.url || ''}'>${safeHtmlString(track?.name || '')}</a>
