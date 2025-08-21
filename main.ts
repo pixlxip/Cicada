@@ -33,7 +33,7 @@ export default {
     <head>${css ? `
       <link rel='stylesheet' href='${css}' />` : ''}
     </head>
-    <body${bodyClassesStr}>
+    <body${bodyClassesAttr}>
       <img class='cover' src="${track?.image?.[coverIndex]?.['#text']?.toString?.() || ''}" />
       <span class='songname'>${safeHtmlString(track?.name || '')}</span>
       <a class='linkedsongname' href='${track?.url || ''}'>${safeHtmlString(track?.name || '')}</a>
