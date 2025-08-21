@@ -27,7 +27,7 @@ export default {
       ...(track?.['@attr']?.nowplaying === 'true' ? ['nowplaying'] : []),
       ...(!track ? ['empty'] : [])
     ].join(' ');
-    const bodyClassAttr = bodyClasses ? ` class="${bodyClassesStr}"` : '';
+    const bodyClassAttr = bodyClasses ? ` class="${bodyClasses}"` : '';
 
     const html = `<!DOCTYPE html>
     <head>${css ? `
