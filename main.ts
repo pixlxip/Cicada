@@ -16,12 +16,18 @@ export default {
     recentsUrl.searchParams.append('user', user);
     recentsUrl.searchParams.append('api_key', api_key);
     const recentsResponse = await fetch(recentsUrl.toString());
-
     const recents = await recentsResponse.json();
 
     if (recents.error && recents.message === 'User not found') return new Response('user not found', { status: 404 });
 
     const track = recents.recenttracks.track[0];
+
+    const trackUrl = new URL('https://ws.audioscrobbler.com/2.0/?method=track.getInfo&format=json');
+    trackUrl.searchParams.append('track', track.name);
+    trackUrl.searchParams.append('artist', track.artist['#text']);
+    trackUrl.searchParams.append('api_key', api_key);
+    const trackResponse = await fetch(trackUrl.toString());
+    const detailedTrack = await trackResponse.json();
 
     const bodyClasses = [
       ...(track?.['@attr']?.nowplaying === 'true' ? ['nowplaying'] : []),
@@ -36,10 +42,11 @@ export default {
       <meta http-equiv='refresh' content='${autoRefresh}' />` : ''}
     </head>
     <body${bodyClassAttr}>
-      <img class='cover' src="${track?.image?.[coverIndex]?.['#text']?.toString?.() || ''}" />
+      <img class='cover' src="${detailedTrack?.track?.album?.image?.[coverIndex]?.['#text'] || ''}" />
       <span class='songname'>${safeHtmlString(track?.name || '')}</span>
       <a class='linkedsongname' href='${track?.url || ''}'>${safeHtmlString(track?.name || '')}</a>
       <span class='albumname'>${safeHtmlString(track?.album?.['#text'] || '')}</span>
+      <a class='linkedalbumname' href='${detailedTrack?.track?.album?.url || ''}'>${safeHtmlString(track?.album?.['#text'] || '')}</a>
       <span class='artistname'>${safeHtmlString(track?.artist?.['#text'] || '')}</span>
       <span class='promo'>Widget from <a href='https://github.com/pixlxip/Cicada/'>Cicada</a></span>
     </body>`;
