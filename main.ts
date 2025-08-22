@@ -7,6 +7,8 @@ export default {
     const coverIndex = { small: 0, medium: 1, large: 2, extralarge: 3 }[coverSize];
     if (coverIndex === undefined) return new Response('invalid cover size', { status: 400 });
 
+    const autoRefresh = params.get('refresh') || '30';
+
     const css = params.get('css');
     const api_key = Deno.env.get('LASTFM_API_KEY');
 
@@ -29,7 +31,8 @@ export default {
 
     const html = `<!DOCTYPE html>
     <head>${css ? `
-      <link rel='stylesheet' href='${css}' />` : ''}
+      <link rel='stylesheet' href='${css}' />` : ''}${autoRefresh ? `
+      <meta http-equiv='refresh' content='${autoRefresh}' />` : ''}
     </head>
     <body${bodyClassAttr}>
       <img class='cover' src="${track?.image?.[coverIndex]?.['#text']?.toString?.() || ''}" />
