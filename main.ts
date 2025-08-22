@@ -12,16 +12,16 @@ export default {
     const css = params.get('css');
     const api_key = Deno.env.get('LASTFM_API_KEY');
 
-    const url = new URL('https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&limit=1&format=json');
-    url.searchParams.append('user', user);
-    url.searchParams.append('api_key', api_key);
-    const response = await fetch(url.toString());
+    const recentsUrl = new URL('https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&limit=1&format=json');
+    recentsUrl.searchParams.append('user', user);
+    recentsUrl.searchParams.append('api_key', api_key);
+    const recentsResponse = await fetch(recentsUrl.toString());
 
-    const data = await response.json();
+    const recents = await recentsResponse.json();
 
-    if (data.error && data.message === 'User not found') return new Response('user not found', { status: 404 });
+    if (recents.error && recents.message === 'User not found') return new Response('user not found', { status: 404 });
 
-    const track = data.recenttracks.track[0];
+    const track = recents.recenttracks.track[0];
 
     const bodyClasses = [
       ...(track?.['@attr']?.nowplaying === 'true' ? ['nowplaying'] : []),
