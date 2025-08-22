@@ -30,7 +30,8 @@ export default {
     const bodyClassAttr = bodyClasses ? ` class="${bodyClasses}"` : '';
 
     const html = `<!DOCTYPE html>
-    <head>${css ? `
+    <head>
+      <style>.promo { display: none; }</style>${css ? `
       <link rel='stylesheet' href='${css}' />` : ''}${autoRefresh ? `
       <meta http-equiv='refresh' content='${autoRefresh}' />` : ''}
     </head>
@@ -38,8 +39,9 @@ export default {
       <img class='cover' src="${track?.image?.[coverIndex]?.['#text']?.toString?.() || ''}" />
       <span class='songname'>${safeHtmlString(track?.name || '')}</span>
       <a class='linkedsongname' href='${track?.url || ''}'>${safeHtmlString(track?.name || '')}</a>
-      <span class='album'>${safeHtmlString(track?.album?.['#text'] || '')}</span>
-      <span class='artist'>${safeHtmlString(track?.artist?.['#text'] || '')}</span>
+      <span class='albumname'>${safeHtmlString(track?.album?.['#text'] || '')}</span>
+      <span class='artistname'>${safeHtmlString(track?.artist?.['#text'] || '')}</span>
+      <span class='promo'>Widget from <a href='https://github.com/pixlxip/Cicada/'>Cicada</a></span>
     </body>`;
 
     return new Response(html, {
