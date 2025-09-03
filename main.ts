@@ -1,3 +1,5 @@
+import { dedent } from "@std/text";
+
 export default {
   async fetch(request, _env, _ctx) {
     switch (new URL(request.url).pathname) {
@@ -10,25 +12,29 @@ export default {
 }
 
 function index() {
-  return new Response(`\
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Cicada</title>
-</head>
-<body>
-  <h1>Cicada</h1>
-  <p>An embeddable, stylable page for displaying Last.fm status with no client-side JS.</p>
-  <p>For example:</p>
-  <code>
-  ${safeHtmlString`<iframe href='https://cicada.pixlxip.deno.net/embed?user=pixl_xip&refresh=10'/>`}
-  </code>
-</body>
-</html>`, {
-    headers: {
-      'content-type': 'text/html;charset=UTF-8',
+  return new Response(
+    dedent`
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <title>Cicada</title>
+      </head>
+      <body>
+        <h1>Cicada</h1>
+        <p>An embeddable, stylable page for displaying Last.fm status with no client-side JS.</p>
+        <p>For example:</p>
+        <code>
+        ${safeHtmlString`<iframe href='https://cicada.pixlxip.deno.net/embed?user=pixl_xip&refresh=10'/>`}
+        </code>
+      </body>
+      </html>
+    `,
+    {
+      headers: {
+        'content-type': 'text/html;charset=UTF-8',
+      }
     }
-  });
+  );
 }
 
 async function embed(request) {
@@ -71,22 +77,23 @@ async function embed(request) {
   ].join(' ');
   const bodyClassAttr = bodyClasses ? ` class='${bodyClasses}'` : '';
 
-  const html = `\
-  <!DOCTYPE html>
-  <head>
-    <style>.promo { display: none; }</style>${css ? `
-    <link rel='stylesheet' href='${css}' />` : ''}${autoRefresh ? `
-    <meta http-equiv='refresh' content='${autoRefresh}' />` : ''}
-  </head>
-  <body${bodyClassAttr}>
-    <img class='cover' src='${detailedTrack?.track?.album?.image?.[coverIndex]?.['#text'] || ''}' />
-    <span class='songname'>${safeHtmlString(track?.name || '')}</span>
-    <a class='linkedsongname' href='${track?.url || ''}'>${safeHtmlString(track?.name || '')}</a>
-    <span class='albumname'>${safeHtmlString(track?.album?.['#text'] || '')}</span>
-    <a class='linkedalbumname' href='${detailedTrack?.track?.album?.url || ''}'>${safeHtmlString(track?.album?.['#text'] || '')}</a>
-    <span class='artistname'>${safeHtmlString(track?.artist?.['#text'] || '')}</span>
-    <span class='promo'>Widget from <a href='https://github.com/pixlxip/Cicada/'>Cicada</a></span>
-  </body>`;
+  const html = dedent`
+    <!DOCTYPE html>
+    <head>
+      <style>.promo { display: none; }</style>${css ? `
+      <link rel='stylesheet' href='${css}' />` : ''}${autoRefresh ? `
+      <meta http-equiv='refresh' content='${autoRefresh}' />` : ''}
+    </head>
+    <body${bodyClassAttr}>
+      <img class='cover' src='${detailedTrack?.track?.album?.image?.[coverIndex]?.['#text'] || ''}' />
+      <span class='songname'>${safeHtmlString(track?.name || '')}</span>
+      <a class='linkedsongname' href='${track?.url || ''}'>${safeHtmlString(track?.name || '')}</a>
+      <span class='albumname'>${safeHtmlString(track?.album?.['#text'] || '')}</span>
+      <a class='linkedalbumname' href='${detailedTrack?.track?.album?.url || ''}'>${safeHtmlString(track?.album?.['#text'] || '')}</a>
+      <span class='artistname'>${safeHtmlString(track?.artist?.['#text'] || '')}</span>
+      <span class='promo'>Widget from <a href='https://github.com/pixlxip/Cicada/'>Cicada</a></span>
+    </body>
+  `;
 
   return new Response(html, {
     headers: {
