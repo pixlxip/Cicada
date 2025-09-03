@@ -1,4 +1,4 @@
-import { dedent } from "@std/text";
+import { dedent } from "@std/text/unstable-dedent";
 
 export default {
   async fetch(request, _env, _ctx) {
